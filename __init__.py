@@ -48,10 +48,10 @@ def generateBalancedLadder(rhapi, generate_args=None):
     else:
         seed_offset = 0
 
-    # Ensure unseeded_pilots is sorted in ascending order
-    unseeded_pilots = sorted(list(range(seed_offset, total_pilots + seed_offset)))
+    # Reverse the list to ensure descending order
+    unseeded_pilots = sorted(list(range(seed_offset, total_pilots + seed_offset)), reverse=True)
 
-    # Calculate the number of heats needed and distribute pilots evenly
+    # Calculate the number of heats needed and distribute pilots inversely
     num_heats = (total_pilots + available_seats - 1) // available_seats  # Ceiling division
     pilots_per_heat = total_pilots // num_heats
     extra_pilots = total_pilots % num_heats
@@ -62,8 +62,8 @@ def generateBalancedLadder(rhapi, generate_args=None):
             []
         )
 
-        # Determine the number of pilots for this heat
-        current_heat_pilots = pilots_per_heat + (1 if heat_index < extra_pilots else 0)
+        # Determine the number of pilots for this heat inversely
+        current_heat_pilots = pilots_per_heat + (1 if heat_index >= num_heats - extra_pilots else 0)
 
         for _ in range(current_heat_pilots):
             if unseeded_pilots:
